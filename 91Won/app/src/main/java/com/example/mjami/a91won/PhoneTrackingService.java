@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 public class PhoneTrackingService extends Service {
 
+    OutgoingCallReceiver receiver;
     public PhoneTrackingService() {
     }
 
@@ -31,10 +32,19 @@ public class PhoneTrackingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId){
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
-        this.registerReceiver(new OutgoingCallReceiver(), filter);
+        receiver = new OutgoingCallReceiver();
+        this.registerReceiver(receiver, filter);
         return START_STICKY;
     }
 
+    public void cleanupService(){
+        this.unregisterReceiver(receiver);
+    }
+
+    public void onDestroy(){
+        cleanupService();
+        super.onDestroy();
+    }
     //inner class of outgoing receiver
     public class OutgoingCallReceiver extends BroadcastReceiver {
         final String emergencyNumber = "7634799116";

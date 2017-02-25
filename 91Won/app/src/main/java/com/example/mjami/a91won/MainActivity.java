@@ -1,6 +1,8 @@
 package com.example.mjami.a91won;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -19,10 +21,14 @@ public class MainActivity extends AppCompatActivity {
     final int MY_INTERNET_PERMISSION = 1;
     final int MY_FINE_LOCATION_PERMISSION = 2;
 
+    boolean permissionsMet = false;
+    Intent serviceIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        serviceIntent = new Intent(this, PhoneTrackingService.class);
 
         ToggleButton onOrOff = (ToggleButton) findViewById(R.id.toggleButton);
         onOrOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -36,9 +42,23 @@ public class MainActivity extends AppCompatActivity {
                 else
                 {
                     Log.d("checked", "unchecked");
+                    if(serviceIsRunning(PhoneTrackingService.class)) {
+                        Log.d("service", "stopping service");
+                        stopService(serviceIntent);
+                    }
                 }
             }
         });
+    }
+
+    private boolean serviceIsRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void checkAndSetPermissions() {
@@ -79,19 +99,32 @@ public class MainActivity extends AppCompatActivity {
             Log.d("permissions", "about to request");
             ActivityCompat.requestPermissions(this, permissionsArray, 0);
         }
-        else {
-            Intent serviceIntent = new Intent(this, PhoneTrackingService.class);
-            startService(serviceIntent);
+        else { //all permissions already acquired
+            Log.d("permissions", "all permissions met");
+            permissionsMet = true;
+            beginPhoneTracking();
         }
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
         Log.d("permissions", "callback");
-        for(String perm : permissions){
-            Log.d("permissions", perm);
+        boolean allPermissionsMet = true;
+        for (int i = 0; i < permissions.length; i++){
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                Log.d("permissions", "Permission missing: " + permissions[i]);
+                allPermissionsMet = false;
+            }
         }
 
-        Intent serviceIntent = new Intent(this, PhoneTrackingService.class);
-        startService(serviceIntent);
+        permissionsMet = allPermissionsMet;
+        beginPhoneTracking();
+    }
+
+    private void beginPhoneTracking(){
+        if (permissionsMet) {
+            Log.d("service", "starting service");
+//            Intent serviceIntent = new Intent(this, PhoneTrackingService.class);
+            startService(serviceIntent);
+        }
     }
 }
