@@ -14,13 +14,18 @@ app.use('/', express.static(__dirname + "/public"));
 io.on('connection', function(socket) {
     console.log('connection created');
     console.log(socket.id);
+    // console.log(socket.conn);
+    // console.log(socket.request);
 
-    socket.on('dog', function() {
-        console.log('dog recieved');
+    socket.on('dog', function(message) {
+        console.log('dog: %s', message);
     });
+
+    socket.on('message', function(message) {
+        console.log(message);
+    })
 })
 server.listen(3000);
-
 
 // let server = app.listen(3000, function() {
 //     let host = server.address().address;

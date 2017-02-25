@@ -20,7 +20,7 @@ function sendDog() {
     if(socket === undefined) {
         console.log('error no connection');
     } else {
-        socket.emit('dog');
+        socket.emit('dog', 'fart');
     }
 }
 
@@ -28,7 +28,7 @@ function sendCat() {
     if(socket === undefined) {
         console.log('error no connection');
     } else {
-        socket.emit('cat lol');
+        socket.send('cat lol');
     }
 }
 
