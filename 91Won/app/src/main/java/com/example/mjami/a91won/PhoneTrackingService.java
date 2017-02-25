@@ -28,11 +28,13 @@ public class PhoneTrackingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         IntentFilter filter = new IntentFilter();
-        filter.addAction("com.google.android.c2dm.intent.RECEIVE");
-        filter.addAction("com.google.android.c2dm.intent.REGISTRATION");
-        filter.addCategory("com.example.myapp");
-        this.registerReceiver(new OutgoingCallReceiver(), filter, "com.google.android.c2dm.permission.SEND", null);
-        return super.onStartCommand(intent,flags,startId);
+        filter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
+        this.registerReceiver(new OutgoingCallReceiver(), filter);
+        return START_STICKY;
+    }
+
+    public void getLocationData(){
+
     }
 
     //inner class of outgoing receiver
@@ -43,16 +45,14 @@ public class PhoneTrackingService extends Service {
             String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
             Log.d("receiver", phoneNumber);
             Log.d("receiver", intent.toString() + ", call to: " + phoneNumber);
-            Toast.makeText(context, "Outgoing call detected: " + phoneNumber, Toast.LENGTH_LONG).show();
-            //TODO: Handle outgoing call event here
+            Toast.makeText(context, "Transmitting Location to Emergency Services " , Toast.LENGTH_LONG).show();
+
             if(phoneNumber.equals(emergencyNumber)){
-//                Intent serviceIntent = new Intent(context, LocationService.class);
-//                context.startService(serviceIntent);
                 String locationContext = Context.LOCATION_SERVICE;
                 LocationManager locationManager = (LocationManager) serviceContext.getSystemService(locationContext);
 
                 Location location = null;
-                if (ContextCompat.checkSelfPermission(serviceContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(serviceContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 }
                 if (location != null) {
