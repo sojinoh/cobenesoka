@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <style>
+            .location{
+                padding-left: 5%;
+            }
+            #mapholder{
+                float: right;
+                padding-right: 5%;
+                position: relative;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script type='application/javascript' src="http://141.140.82.59:1504/socket.io/socket.io.js"></script>
+        <script>
+            function showMap(){
+                var latitude = 44.9365;
+                var longitude = -93.1684;
+                var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latitude+","+longitude+
+                    "&zoom=14&size=600x400&markers=color:red|" + latitude + "," + longitude+ "&sensor=false&key=AIzaSyDYti1R9ClXDApghpGtNEVy-5nBaAk9iws";
+                document.getElementById("mapholder").innerHTML = "<img src='" + img_url +"'>";
+            }
+            
+            $(document).ready(function(){
+                showMap();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="mapholder"></div>
+        <h1>Location Name: </h1>
+        <h3 class="location">Latitude: </h3>
+        <br>
+        <h3 class="location">Longitude: </h3>
+        <br>
+        <h1>Caller Name: </h1>
+        <br>
+        <h1>Phone Number: </h1>
+        <br>
+        <h1>Emergency: </h1>
+        <br>
+        <h1>Building Type: </h1>
+        <br>
+        <h1>Room Number: </h1>
+        <br>
+        <h1>Other Information: </h1>
+    </body>
+</html>

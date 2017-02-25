@@ -2,9 +2,15 @@
     <head>
         <link rel='stylesheet' href='css/style.css' />
         <script type='application/javascript' src='lib/jquery-3.1.1.js'></script>
+        <script type='application/javascript' src="/socket.io/socket.io.js"></script>
         <script type='text/javascript' src='js/main.js'></script>
     </head>
     <body>  
-        <span id='header'>Dog</span>
+        <div id='header'>Dog</div>
+        <div id='controls'>
+            <button id='btnConnect'>Connect to server!</button>
+            <button id='btnSendDog'>Send Dog</button>
+            <button id='btnSendCat'>Send Cat</button>
+        </div>
     </body>
 </html>
