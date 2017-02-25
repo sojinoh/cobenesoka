@@ -11,7 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.kyleduo.switchbutton.SwitchButton;
 
 import java.util.ArrayList;
 
@@ -30,14 +33,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         serviceIntent = new Intent(this, PhoneTrackingService.class);
 
-        ToggleButton onOrOff = (ToggleButton) findViewById(R.id.toggleButton);
+        SwitchButton onOrOff = (SwitchButton) findViewById(R.id.toggleButton);
         onOrOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                TextView text = (TextView) findViewById(R.id.beaconText);
                 if(isChecked)
                 {
                     Log.d("checked","checked");
                     checkAndSetPermissions();
+                    text.setText("Beacon is On");
                 }
                 else
                 {
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     if(serviceIsRunning(PhoneTrackingService.class)) {
                         Log.d("service", "stopping service");
                         stopService(serviceIntent);
+                        text.setText("Beacon is Off");
                     }
                 }
             }
