@@ -1,6 +1,7 @@
 package com.example.mjami.a91won;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     final int MY_PROCESS_OUTGOING_CALLS_PERMISSION = 0;
     final int MY_INTERNET_PERMISSION = 1;
     final int MY_FINE_LOCATION_PERMISSION = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +73,10 @@ public class MainActivity extends AppCompatActivity {
             Log.d("permissions", "about to request");
             ActivityCompat.requestPermissions(this, permissionsArray, 0);
         }
-
+        else {
+            Intent serviceIntent = new Intent(this, PhoneTrackingService.class);
+            startService(serviceIntent);
+        }
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
@@ -79,5 +84,8 @@ public class MainActivity extends AppCompatActivity {
         for(String perm : permissions){
             Log.d("permissions", perm);
         }
+
+        Intent serviceIntent = new Intent(this, PhoneTrackingService.class);
+        startService(serviceIntent);
     }
 }
