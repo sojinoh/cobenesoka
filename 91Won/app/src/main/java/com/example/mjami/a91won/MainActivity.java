@@ -65,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
             permissions_nums.add(MY_FINE_LOCATION_PERMISSION);
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.READ_PHONE_STATE);
+            permissions_nums.add(MY_FINE_LOCATION_PERMISSION);
+        }
+
+
         if(permissions.size() != 0){
             String[] permissionsArray = new String[permissions.size()];
             for(int i = 0; i < permissions.size(); i++){

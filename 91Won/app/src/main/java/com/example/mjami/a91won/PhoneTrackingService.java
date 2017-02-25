@@ -11,10 +11,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
 public class PhoneTrackingService extends Service {
+
     public PhoneTrackingService() {
     }
 
@@ -31,10 +33,6 @@ public class PhoneTrackingService extends Service {
         filter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
         this.registerReceiver(new OutgoingCallReceiver(), filter);
         return START_STICKY;
-    }
-
-    public void getLocationData(){
-
     }
 
     //inner class of outgoing receiver
@@ -58,6 +56,15 @@ public class PhoneTrackingService extends Service {
                 if (location != null) {
                     Log.d("location", "Lat: " + location.getLatitude());
                     Log.d("location", "Long: " + location.getLongitude());
+
+                    LocationAsyncTask task = new LocationAsyncTask();
+                    String latStr = new Double(location.getLatitude()).toString();
+                    String longStr = new Double(location.getLongitude()).toString();
+                    TelephonyManager tMgr = (TelephonyManager)serviceContext.getSystemService(Context.TELEPHONY_SERVICE);
+                    String mPhoneNumber = tMgr.getLine1Number();
+                    Log.d("phone", mPhoneNumber);
+
+                    task.execute(new String[] {latStr, longStr, mPhoneNumber});
                 }
                 else{
                     Log.d("location", "Location is null");

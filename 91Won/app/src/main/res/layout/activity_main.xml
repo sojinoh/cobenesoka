@@ -11,7 +11,7 @@
     tools:context="com.example.mjami.a91won.MainActivity">
 
     <TextView
-        android:text="Turn on Smart911?"
+        android:text="Turn on Beacon?"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
@@ -19,7 +19,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        tools:text="Turn on Smart911?" />
+        tools:text="Turn on Beacon?" />
 
     <ToggleButton
         android:text="ToggleButton"
