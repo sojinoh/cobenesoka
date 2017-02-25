@@ -10,8 +10,13 @@ import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
+    final int MY_PROCESS_OUTGOING_CALLS_PERMISSION = 0;
+    final int MY_INTERNET_PERMISSION = 1;
+    final int MY_FINE_LOCATION_PERMISSION = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,27 +40,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkAndSetPermissions() {
+        ArrayList<String> permissions = new ArrayList<>();
+        ArrayList<Integer> permissions_nums = new ArrayList<>();
         //TODO: Should probably change "this" to the background service
+        Log.d("permissions", "ready");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PROCESS_OUTGOING_CALLS)){
-                //get permissions request
-                Log.d("permissions", "requestion outgoing_calls permissions");
-            }
-            else{
-                //no action needed?
-                Log.d("permissions", "permissions already held");
-            }
+            Log.d("permissions", "needed");
+            permissions.add(Manifest.permission.PROCESS_OUTGOING_CALLS);
+            permissions_nums.add(MY_PROCESS_OUTGOING_CALLS_PERMISSION);
+            Log.d("permissions", "added");
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PROCESS_OUTGOING_CALLS)){
-                //get permissions request
-                Log.d("permissions", "requestion outgoing_calls permissions");
+        //Internet Permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.INTERNET);
+            permissions_nums.add(MY_INTERNET_PERMISSION);
+        }
+
+        //Fine Location Services
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            permissions_nums.add(MY_FINE_LOCATION_PERMISSION);
+        }
+
+        if(permissions.size() != 0){
+            String[] permissionsArray = new String[permissions.size()];
+            for(int i = 0; i < permissions.size(); i++){
+                permissionsArray[i] = permissions.get(i);
             }
-            else{
-                //no action needed?
-                Log.d("permissions", "permissions already held");
-            }
+            Log.d("permissions", "about to request");
+            ActivityCompat.requestPermissions(this, permissionsArray, 0);
+        }
+
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        Log.d("permissions", "callback");
+        for(String perm : permissions){
+            Log.d("permissions", perm);
         }
     }
 }
