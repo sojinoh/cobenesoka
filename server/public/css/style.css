@@ -1,4 +1,13 @@
 #header {
-    font-size: 36pt;
-    color: steelblue;
+    font-size: 54pt;
+    color: blueviolet;
+    border: aquamarine solid thick;
+    border-radius: 10px;
+}
+div {
+   background-color: cadetblue;
+}
+
+#btnConnect {
+    color: bisque;
 }

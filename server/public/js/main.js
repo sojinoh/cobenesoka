@@ -30,6 +30,11 @@ function sendCat() {
     } else {
         socket.send('cat lol');
     }
+    
+    socket.on('eventname', function(data) {
+        parseData
+        displyaData()
+    });
 }
 
 window.onload = setup;
