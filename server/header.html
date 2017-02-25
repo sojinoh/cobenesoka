@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <style>
+            #phoneNumber {
+                font-size: 30pt;
+                margin-top: 20pt;
+                margin-bottom: 20pt;
+            }
+            #timeCalled {
+                color: black;
+                margin-bottom: 12pt;
+                font-size: 20pt;
+            }
+            #latitude {
+                display: block;
+                font-size: 20pt;
+            }
+
+            #longitude {
+                display: block;
+                font-size: 20pt;
+                margin-bottom: 30pt;
+            }
+            
+            #noRecent {
+                font-size: 20pt;
+                margin-bottom: 20px;
+            }
+
+            table td {
+                font-size: 18pt;
+                padding-left: 10px;
+            }
+
+            table {
+                margin-bottom: 20px;
+            }
+        </style>
+        <script>
+            window.onload = function() {
+                var searchButton = document.getElementById('searchButton');
+                var searchBox = document.getElementById('searchBox');
+                searchButton.addEventListener('click', submitSearch, false);
+                searchBox.addEventListener('keyup', searchBoxEnterSearch, false);
+
+                var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latitude+","+longitude+
+                    "&zoom=14&size=600x400&markers=color:red|" + latitude + "," + longitude+ "&sensor=false&key=AIzaSyDYti1R9ClXDApghpGtNEVy-5nBaAk9iws";
+                var mapHolder = document.getElementById('mapHolder').innerHTML = "<img src='" + img_url + "'>";
+            }
+
+            function submitSearch() {
+                var searchBox = document.getElementById('searchBox');
+                var url = "http://localhost:3002/" + searchBox.value.replace(/ /g, '');
+                window.location.href = url;
+            }
+
+            function searchBoxEnterSearch(event) {
+                if (event.keyCode == '13') {
+                    submitSearch();
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id='controls'>
+            <input type='text' id='searchBox' placeholder="phone number"/> <button id='searchButton'>search</button>
+        </div>
