@@ -63,9 +63,9 @@ public class PhoneTrackingService extends Service {
             String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
             Log.d("receiver", phoneNumber);
             Log.d("receiver", intent.toString() + ", call to: " + phoneNumber);
-            Toast.makeText(context, "Transmitting Location to Emergency Services " , Toast.LENGTH_LONG).show();
 
             if(phoneNumber.equals(emergencyNumber)){
+                Toast.makeText(context, "Transmitting Location to Emergency Services " , Toast.LENGTH_LONG).show();
                 createAndConnectGoogleLocationClient();
             }
         }
